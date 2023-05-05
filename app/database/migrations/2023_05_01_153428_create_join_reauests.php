@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('join_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
-            $table->rememberToken();
+            $table->foreignId('organisation_id')->constrained('organisations');
+            $table->foreignId('group_id')->constrained('groups');
+            $table->foreignId('user_id')->constrained('users');
+            $table->enum('status', ['PENDING','APPROVED','DENIED']);
+            $table->string('motivation');
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('join_reauests');
     }
 };
