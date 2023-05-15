@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 class Group extends Model
 {
@@ -14,7 +15,9 @@ class Group extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->withPivot(['colour', 'alias']);
+        return $this->belongsToMany(User::class)
+            ->withPivot(['colour', 'alias'])
+            ->as('grp_attr');
     }
     public function joinRequests(): HasMany
     {
@@ -24,8 +27,8 @@ class Group extends Model
     {
         return $this->belongsTo(Organisation::class);
     }
-    public function messages(): BelongsToMany
+    public function messages(): Hasmany
     {
-        return $this->belongsToMany(Message::class);
+        return $this->hasMany(Message::class);
     }
 }

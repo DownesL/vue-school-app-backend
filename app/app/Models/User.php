@@ -46,10 +46,20 @@ class User extends Authenticatable
     ];
 
     public function groups() : BelongsToMany {
-        return $this->belongsToMany(Group::class)->withPivot(['colour', 'alias']);
+        return $this->belongsToMany(Group::class)
+            ->withPivot(['colour', 'alias'])
+            ->as('grp_attr');
     }
+
     public function messages() : BelongsToMany {
-        return $this->belongsToMany(Message::class)->withPivot(['read', 'flagged']);
+        return $this->belongsToMany(Message::class)
+            ->withPivot(['read', 'flagged'])
+            ->as('msg_attr');
+    }
+    public function flaggedMessages() : BelongsToMany {
+        return $this->belongsToMany(Message::class)
+            ->withPivot(['read', 'flagged'])
+            ->wherePivot('flagged',1);
     }
     public function roles(): BelongsToMany
     {

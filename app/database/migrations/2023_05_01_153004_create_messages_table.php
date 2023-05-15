@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->string('filename')->nullable();
             $table->boolean('important');
+            $table->foreignId('group_id')->constrained('groups');
             $table->timestamps();
         });
     }

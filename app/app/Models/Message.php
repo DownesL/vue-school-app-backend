@@ -11,12 +11,19 @@ class Message extends Model
 {
     use HasFactory;
 
-    public function groups(): BelongsToMany
+    public function group(): BelongsTo
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsTo(Group::class);
     }
     public function users() : BelongsToMany
     {
-        return $this->belongsToMany(User::class)->withPivot(['read','flagged']);
+        return $this->belongsToMany(User::class)
+            ->withPivot(['read','flagged'])
+            ->as('msg_attr');
+    }
+    public function readMessages() : BelongsToMany {
+        return $this->belongsToMany(User::class)
+            ->withPivot(['read', 'flagged'])
+            ->wherePivot('read',1);
     }
 }

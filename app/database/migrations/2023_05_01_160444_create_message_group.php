@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('group_message', function (Blueprint $table) {
-            $table->foreignId('message_id')->constrained('messages')->cascadeOnDelete();
-            $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
-        });
+//        Schema::create('group_message', function (Blueprint $table) {
+//            $table->foreignId('message_id')->constrained('messages')->cascadeOnDelete();
+//            $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
+//        });
     }
 
     /**
