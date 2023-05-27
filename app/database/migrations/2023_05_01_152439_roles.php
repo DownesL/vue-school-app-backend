@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->enum('level',['USER','GROUP_ADMIN']);
-            $table->foreignId('organisation_id')->nullable()->constrained('organisations');
-            $table->timestamps();
-        });
+//        Schema::create('roles', function (Blueprint $table) {
+//            $table->id();
+//            $table->enum('level',['USER','GROUP_ADMIN']);
+//            $table->foreignId('organisation_id')->nullable()->constrained('organisations');
+//            $table->timestamps();
+//        });
     }
 
     /**

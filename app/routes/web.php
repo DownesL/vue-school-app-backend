@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use App\Http\Controllers\UserController;
+use App\Models\Message;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,32 +15,23 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::post('/api/login', function (Request $request) {
-    $credentials = $request->only('email', 'password');
-    if (Auth::attempt($credentials)) {
-        return response(['message' => 'The user has been authenticated successfully'], 200);
+Route::post('/api/login', [UserController::class, 'login'])->name('login');
+
+Route::post('/api/logout', [UserController::class, 'logout']);
+
+Route::post('/api/register', [UserController::class, 'register']);
+
+Route::get('', function () {
+    $users = User::get();
+    foreach ($users as $user) {
+        $all = Message::whereHas('group.users', function ($q) use ($user) {
+            $q->where('id', $user->id);
+        })
+            ->orderByDesc('created_at')
+            ->get();
+        $read = $user->messages()->get();
+        $unread = $all->diff($read);
+        return \App\Http\Resources\MessageResource::collection($unread);
     }
-    return response(['message' => 'The provided credentials do not match our records.'], 401);
-
-})->name('login');
-
-Route::post('/api/logout', function (Request $request) {
-    Auth::guard('web')->logout();
-    $request->session()->invalidate();
-    return response(['message' => 'The user has been logged out successfully'], 200);
-});
-
-Route::post('/api/register', function (Request $request) {
-    $request->validate([
-        'first_name' => ['required', 'string', 'max:255'],
-        'last_name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
-//        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-    ]);
-    $user = User::create([
-        'first_name' => $request->first_name,
-        'last_name' => $request->last_name,
-        'email' => $request->email,
-    ]);
-    return response(['message' => 'The user has been registered out successfully'], 200);
+    return view('mail', ['message' => \App\Models\Message::first()]);
 });

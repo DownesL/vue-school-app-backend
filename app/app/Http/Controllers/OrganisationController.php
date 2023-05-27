@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrganisationResource;
 use App\Models\Organisation;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,28 +16,35 @@ class OrganisationController extends Controller
 
     public function userOrgans()
     {
-        return Organisation::whereHas('roles', function ($q) {
-            $q->where('id','>',1)
-                ->whereHas('users', function ($p) {
-                    $p->where('id', Auth::id());
-                });
-            })->get();
+        return Organisation::whereHas('admins', function ($q) {
+            $q->where('id', Auth::id());
+        })->get();
     }
 
     public function nonUserOrgans()
     {
-        return Organisation::whereHas('roles', function ($q) {
-            $q->where('id','>',1)
-                ->whereDoesntHave('users', function ($p) {
-                    $p->where('id', Auth::id());
-                });
-            })->get();
+        return Organisation::whereDoesntHave('admins', function ($p) {
+            $p->where('id', Auth::id());
+        })->get();
     }
 
-    public function organ($id)
+    public function organ(Organisation $organisation)
     {
-        return Organisation::with(['groups','roles.users'])
-            ->where('id', $id)->first();
+        return new OrganisationResource($organisation);
+    }
+
+    public function create(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:organisations'],
+            'description' => ['required', 'string', 'max:255'],
+        ]);
+        $organ = Organisation::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+        Auth::user()->organisations()->attach($organ);
+        return response(['message' => 'The Organisation has been created successfully', 'organisation_id' => $organ->id], 200);
     }
 
 

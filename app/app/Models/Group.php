@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Auth;
 class Group extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'description',
+        'organisation_id'
+    ];
+
+    public $timestamps = true;
+
 
     public function users(): BelongsToMany
     {
@@ -21,7 +29,7 @@ class Group extends Model
     }
     public function joinRequests(): HasMany
     {
-        return $this->hasMany(JoinRequests::class);
+        return $this->hasMany(JoinRequest::class);
     }
     public function organisation(): BelongsTo
     {

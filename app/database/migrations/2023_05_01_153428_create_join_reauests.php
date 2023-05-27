@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('join_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('organisation_id')->constrained('organisations');
-            $table->foreignId('group_id')->constrained('groups');
-            $table->foreignId('user_id')->constrained('users');
-            $table->enum('status', ['PENDING','APPROVED','DENIED']);
+            $table->foreignId('organisation_id')->nullable()->constrained('organisations');
+            $table->foreignId('group_id')->nullable()->constrained('groups');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->enum('status', ['PENDING','APPROVED','DENIED'])->default('PENDING');
             $table->string('motivation');
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('join_reauests');
+        Schema::dropIfExists('join_requests');
     }
 };
