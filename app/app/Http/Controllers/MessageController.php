@@ -73,7 +73,7 @@ class MessageController extends Controller
 
         $groups = $organisation->groups()->whereIn('name', $request->groups)->get();
         $path = null;
-        if ($request->message_file) {
+        if ($request->filename) {
             $path = $request->file('filename')->storeAs(
                 'messages', preg_replace('/\W+/', '', ($request->name . Carbon::now())) . '.pdf'
             );

@@ -1,0 +1,259 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "UpToDate API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/organisations/all": {
+            "get": {
+                "tags": [
+                    "organisation",
+                    "view"
+                ],
+                "operationId": "8cdcd01c8f4b435f0c4870ceda6ec9b7",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "organisation": {
+                                                "$ref": "#components/schemas/Organisation"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organisations": {
+            "get": {
+                "tags": [
+                    "organisation",
+                    "view"
+                ],
+                "summary": "Gets all the organisations that a user has joined as an admin",
+                "operationId": "b1900f058b9086d2868742e8bd89895a",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "organisation": {
+                                                "$ref": "#components/schemas/Organisation"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "organisation",
+                    "create"
+                ],
+                "summary": "Creates a new organisation",
+                "operationId": "eaaa88bae180c310a8cd97ac051fcf65",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "organisation_id": {
+                                                "type": "integer",
+                                                "readOnly": "true",
+                                                "example": "1"
+                                            },
+                                            "message": {
+                                                "type": "string",
+                                                "readOnly": "false",
+                                                "example": "The Organisation has been created successfully"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated/Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    }
+                }
+            }
+        },
+        "/api/organisations/not-joined": {
+            "get": {
+                "tags": [
+                    "organisation",
+                    "view"
+                ],
+                "summary": "Returns all the organisations the user doesn't belong to as an admin",
+                "operationId": "9ac86d9798854df7c94c7264708df420",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "organisation": {
+                                                "$ref": "#components/schemas/Organisation"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organisations/{id}": {
+            "get": {
+                "tags": [
+                    "organisation",
+                    "view"
+                ],
+                "summary": "Returns a specific organisation, if the user is an admin",
+                "operationId": "61e07d8dc70b669caf9a402c08e0205b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of organisation to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "readOnly": "true",
+                                                "example": "1"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "readOnly": "false",
+                                                "example": "Odisee Hogeschool"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "readOnly": "false",
+                                                "example": "Een hogeschool in België die deel uit maakt van de KU Leuven"
+                                            },
+                                            "created_at": {
+                                                "description": "Initial creation timestamp",
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "readOnly": "true"
+                                            },
+                                            "updated_at": {
+                                                "description": "Last update timestamp",
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "readOnly": "true"
+                                            },
+                                            "Groups": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "Admins": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Organisation": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "readOnly": "false",
+                        "example": "Odisee Hogeschool"
+                    },
+                    "description": {
+                        "type": "string",
+                        "readOnly": "false",
+                        "example": "Een hogeschool in België die deel uit maakt van de KU Leuven"
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Organisation"
+                }
+            }
+        }
+    }
+}

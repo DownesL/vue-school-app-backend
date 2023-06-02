@@ -28,5 +28,9 @@ class UserTest extends TestCase
                 'id' => 1,
                 'name' => 'Odisee Hogeschool'
             ]);
+        $r = $this->get('/api/organisations/6');
+        $r->assertStatus(403);
     }
+
+//    public function test_
 }

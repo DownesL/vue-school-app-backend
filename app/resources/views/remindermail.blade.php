@@ -388,9 +388,10 @@
 <body class="antialiased">
 <main>
     <h1>Unread Mails</h1>
-        @foreach($messages as $msg)
-        <a href="http://localhost:5173/messages/{{$msg->id}}">{{$msg->name}}</a>
+    @foreach($messages as $msg)
+        <a href="{{env('WEB_APP_URL')}}/messages/{{$msg->id}}">{{$msg->name}}</a>
     @endforeach
+    <a href="http://localhost:5173/messages">See All Messages</a>
 </main>
 
 </body>

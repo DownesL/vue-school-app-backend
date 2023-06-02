@@ -21,17 +21,3 @@ Route::post('/api/logout', [UserController::class, 'logout']);
 
 Route::post('/api/register', [UserController::class, 'register']);
 
-Route::get('', function () {
-    $users = User::get();
-    foreach ($users as $user) {
-        $all = Message::whereHas('group.users', function ($q) use ($user) {
-            $q->where('id', $user->id);
-        })
-            ->orderByDesc('created_at')
-            ->get();
-        $read = $user->messages()->get();
-        $unread = $all->diff($read);
-        return \App\Http\Resources\MessageResource::collection($unread);
-    }
-    return view('mail', ['message' => \App\Models\Message::first()]);
-});
