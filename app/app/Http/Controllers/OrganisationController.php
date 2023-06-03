@@ -37,6 +37,7 @@ class OrganisationController extends Controller
      *     path="/api/organisations",
      *     summary="Gets all the organisations that a user has joined as an admin",
      *     tags={"organisation","view"},
+     *
      *     @OA\Response(
      *         response=200,
      *         description="OK",
@@ -151,12 +152,19 @@ class OrganisationController extends Controller
     }
 
 
-
     /**
      * @OA\Post(
      *     path="/api/organisations",
      *     summary="Creates a new organisation",
      *     tags={"organisation","create"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Pass organisation information",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="integer", example="Odisee Hogeschool"),
+     *             @OA\Property(property="description", type="string", example="Een hogeschool waar veel blije kindjes zitten."),
+     *         ),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="OK",
